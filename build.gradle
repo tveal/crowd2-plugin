@@ -1,0 +1,92 @@
+buildscript {
+    repositories {
+        maven {
+            url('https://repo.jenkins-ci.org/public/')
+        }
+    }
+    dependencies {
+        // see https://github.com/kohsuke/localizer/issues/12
+        classpath 'org.jvnet.localizer:maven-localizer-plugin:1.23'
+    }
+}
+
+plugins {
+    id 'org.jenkins-ci.jpi' version '0.32.0'
+}
+
+group = 'org.jenkins-ci.plugins'
+version = '2.0.2-SNAPSHOT'
+description = "SecurityRealm that enables the use of Atlassian's Crowd identity management server."
+
+apply from: "$rootDir/gradle/jacoco.gradle"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+ext {
+    // Yikes! Get this coverage up!
+    limits = [
+        'instruction': 7,
+        'branch'     : 6,
+        'line'       : 7,
+        'complexity' : 12,
+        'method'     : 23,
+        'class'      : 39
+    ]
+}
+
+jenkinsPlugin {
+    // version of Jenkins core this plugin depends on, must be 1.420 or later
+    coreVersion = '2.89.3'
+
+    shortName = 'crowd2'
+    displayName = "Crowd 2 Integration"
+    url = 'http://wiki.jenkins-ci.org/display/JENKINS/Crowd+2+Plugin'
+    gitHubUrl = 'https://github.com/jenkinsci/some-plugin'
+
+    workDir = file("$buildDir/jenkins")
+    repoUrl = 'https://repo.jenkins-ci.org/releases'
+    snapshotRepoUrl = 'https://repo.jenkins-ci.org/snapshots'
+    disabledTestInjection = false
+
+    fileExtension = 'hpi'
+
+    developers {
+        developer {
+            id 'theit'
+            name 'Thorsten Heit'
+            email 'theit@gmx.de'
+        }
+        developer {
+            id 'integer'
+            name 'Kanstantsin Shautsou'
+        }
+        developer {
+            id 'pingunaut'
+            name 'Martin Spielmann'
+        }
+    }
+}
+
+repositories {
+    maven {
+        url "https://m2proxy.atlassian.com/repository/public/"
+    }
+    maven {
+        url "http://repo.jenkins-ci.org/public/"
+    }
+}
+
+dependencies {
+    implementation("com.atlassian.crowd:crowd-integration-client-rest:2.8.8") {
+        exclude(module: 'org.apache.httpcomponents:httpclient')
+        exclude(module: 'org.apache.httpcomponents:httpclient-cache')
+        exclude(module: 'com.google.guava:guava')
+    }
+    jenkinsPlugins "org.jenkins-ci.plugins:apache-httpcomponents-client-4-api:4.5.5-3.0"
+    jenkinsPlugins "org.jenkins-ci.plugins:mailer:1.21"
+
+    jenkinsTest "org.junit.jupiter:junit-jupiter-api:5.2.0"
+    jenkinsTest "org.mockito:mockito-core:2.19.0"
+    jenkinsTest "org.assertj:assertj-core:3.12.2"
+}

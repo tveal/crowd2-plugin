@@ -2,6 +2,16 @@
 
 This plugin allows using [Atlassian Crowd](https://www.atlassian.com/software/crowd) or [JIRA](https://www.atlassian.com/software/jira) as an authentication and authorization provider for Jenkins (Crowd version 2 and later). 
 
+---
+
+![Notice](docs/img/warning-circle-orange-32.png)
+
+This is a custom mod/fork of the original [Crowd 2 plugin](https://github.com/jenkinsci/crowd2-plugin),
+adding a **robotic** creator-and-auth implementation for [Configuration as Code Plugin](https://github.com/jenkinsci/configuration-as-code-plugin).
+For more info on the mod, see [docs/robotic-doc.md](docs/robotic-doc.md)
+
+---
+
 [![Build Status](https://ci.jenkins.io/buildStatus/icon?job=Plugins/crowd2-plugin/master)](https://ci.jenkins.io/job/Plugins/job/crowd2-plugin/job/master/)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=jenkins-crowd2-plugin&metric=coverage)](https://sonarcloud.io/dashboard?id=jenkins-crowd2-plugin)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=jenkins-crowd2-plugin&metric=security_rating)](https://sonarcloud.io/dashboard?id=jenkins-crowd2-plugin)
