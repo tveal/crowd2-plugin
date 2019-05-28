@@ -97,24 +97,19 @@ import jenkins.model.Jenkins;
  * @version $Id$
  */
 public class CrowdSecurityRealm extends AbstractPasswordBasedSecurityRealm {
-    /** Used for logging purposes. */
+
     private static final Logger LOG = Logger.getLogger(CrowdSecurityRealm.class.getName());
 
     private static final RoboticSingleton BOT = RoboticSingleton.getBot();
 
-    /** Contains the Crowd server URL. */
     public final String url;
 
-    /** Contains the application name to access Crowd. */
     public final String applicationName;
 
-    /** Contains the application password to access Crowd. */
     public final Secret password;
 
-    /** Contains the Crowd group to which a user must belong to. */
     public final String group;
 
-    /** Specifies whether nested groups can be used. */
     public final boolean nestedGroups;
 
     /** Don't use SSO, only REST API authentication. */
@@ -158,8 +153,6 @@ public class CrowdSecurityRealm extends AbstractPasswordBasedSecurityRealm {
     public final String httpMaxConnections;
 
     /**
-     * The cache configuration
-     *
      * @since 1.9
      */
     private final CacheConfiguration cache;
@@ -222,12 +215,6 @@ public class CrowdSecurityRealm extends AbstractPasswordBasedSecurityRealm {
      * Default constructor. Fields in config.jelly must match the parameter names in the
      * "DataBoundConstructor".
      *
-     * @param url
-     *            The URL for Crowd.
-     * @param applicationName
-     *            The application name.
-     * @param password
-     *            The application password.
      * @param group
      *            The group to which users must belong to. If this parameter is not specified, a
      *            users group membership will not be checked.
@@ -237,30 +224,6 @@ public class CrowdSecurityRealm extends AbstractPasswordBasedSecurityRealm {
      *            The number of minutes to cache authentication validation in the session. If this
      *            value is set to <code>0</code>, each HTTP request will be authenticated with the
      *            Crowd server.
-     * @param useSSO
-     *            Enable SSO authentication.
-     * @param cookieDomain
-     *            The cookie domain
-     * @param cookieTokenkey
-     *            The cookie token key
-     * @param useProxy
-     *            Specifies if a proxy should be used
-     * @param httpProxyHost
-     *            The http proxy host
-     * @param httpProxyPort
-     *            The http proxy port
-     * @param httpProxyUsername
-     *            The http proxy username
-     * @param httpProxyPassword
-     *            The http proxy password
-     * @param socketTimeout
-     *            The socket timeout
-     * @param httpTimeout
-     *            The http timeout
-     * @param httpMaxConnections
-     *            The http max connections
-     * @param cache
-     *            The cache configuration
      */
     // @DataBoundConstructor
     public CrowdSecurityRealm(final String url, final String applicationName, final Secret password, final String group,
@@ -292,126 +255,6 @@ public class CrowdSecurityRealm extends AbstractPasswordBasedSecurityRealm {
         BOT.init(roboticId, roboticSecret, roboticGroup);
     }
 
-    /**
-     * Default constructor. Fields in config.jelly must match the parameter names in the
-     * "DataBoundConstructor".
-     *
-     * @param url
-     *            The URL for Crowd.
-     * @param applicationName
-     *            The application name.
-     * @param password
-     *            The application password.
-     * @param group
-     *            The group to which users must belong to. If this parameter is not specified, a
-     *            users group membership will not be checked.
-     * @param nestedGroups
-     *            <code>true</code> when nested groups may be used. <code>false</code> else.
-     * @param sessionValidationInterval
-     *            The number of minutes to cache authentication validation in the session. If this
-     *            value is set to <code>0</code>, each HTTP request will be authenticated with the
-     *            Crowd server.
-     * @param useSSO
-     *            Enable SSO authentication.
-     * @param cookieDomain
-     *            The cookie domain
-     * @param cookieTokenkey
-     *            The cookie token key
-     * @param useProxy
-     *            Specifies if a proxy should be used
-     * @param httpProxyHost
-     *            The http proxy host
-     * @param httpProxyPort
-     *            The http proxy port
-     * @param httpProxyUsername
-     *            The http proxy username
-     * @param httpProxyPassword
-     *            The http proxy password
-     * @param socketTimeout
-     *            The socket timeout
-     * @param httpTimeout
-     *            The http timeout
-     * @param httpMaxConnections
-     *            The http max connections
-     * @param cache
-     *            The cache configuration
-     *
-     * @deprecated retained for backwards binary compatibility.
-     */
-    @Deprecated
-    public CrowdSecurityRealm(final String url, final String applicationName, final String password, final String group,
-            final boolean nestedGroups,
-            final int sessionValidationInterval, final boolean useSSO, final String cookieDomain,
-            final String cookieTokenkey, final Boolean useProxy, final String httpProxyHost, final String httpProxyPort,
-            final String httpProxyUsername, final String httpProxyPassword, final String socketTimeout,
-            final String httpTimeout, final String httpMaxConnections, final CacheConfiguration cache) {
-
-        this(url, applicationName, Secret.fromString(password.trim()), group, nestedGroups, sessionValidationInterval, useSSO,
-                cookieDomain, cookieTokenkey, useProxy, httpProxyHost, httpProxyPort, httpProxyUsername,
-                Secret.fromString(httpProxyPassword), socketTimeout, httpTimeout, httpMaxConnections, cache,
-                null, null, null);
-        // If this constructor is called, make sure to re-save the configuration.
-        // This way, migrated secrets are persisted securely without user interaction.
-        getDescriptor().save();
-    }
-
-    /**
-     * Fields in config.jelly must match the parameter names in the "DataBoundConstructor".
-     *
-     * @param url
-     *            The URL for Crowd.
-     * @param applicationName
-     *            The application name.
-     * @param password
-     *            The application password.
-     * @param group
-     *            The group to which users must belong to. If this parameter is not specified, a
-     *            users group membership will not be checked.
-     * @param nestedGroups
-     *            <code>true</code> when nested groups may be used. <code>false</code> else.
-     * @param sessionValidationInterval
-     *            The number of minutes to cache authentication validation in the session. If this
-     *            value is set to <code>0</code>, each HTTP request will be authenticated with the
-     *            Crowd server.
-     * @param useSSO
-     *            Enable SSO authentication.
-     * @param cookieDomain
-     *            The cookie domain
-     * @param cookieTokenkey
-     *            The cookie token key
-     * @param useProxy
-     *            Specifies if a proxy should be used
-     * @param httpProxyHost
-     *            The http proxy host
-     * @param httpProxyPort
-     *            The http proxy port
-     * @param httpProxyUsername
-     *            The http proxy username
-     * @param httpProxyPassword
-     *            The http proxy password
-     * @param socketTimeout
-     *            The socket timeout
-     * @param httpTimeout
-     *            The http timeout
-     * @param httpMaxConnections
-     *            The http max connections
-     *
-     * @deprecated retained for backwards binary compatibility.
-     */
-    @Deprecated
-    public CrowdSecurityRealm(final String url, final String applicationName, final String password, final String group,
-            final boolean nestedGroups,
-            final int sessionValidationInterval, final boolean useSSO, final String cookieDomain,
-            final String cookieTokenkey, final Boolean useProxy, final String httpProxyHost, final String httpProxyPort,
-            final String httpProxyUsername, final String httpProxyPassword, final String socketTimeout,
-            final String httpTimeout, final String httpMaxConnections) {
-        this(url, applicationName, password, group, nestedGroups,
-                sessionValidationInterval, useSSO, cookieDomain,
-                cookieTokenkey, useProxy, httpProxyHost, httpProxyPort,
-                httpProxyUsername, httpProxyPassword, socketTimeout,
-                httpTimeout, httpMaxConnections, null);
-    }
-
     public CacheConfiguration getCache() {
         return cache;
     }
@@ -424,9 +267,6 @@ public class CrowdSecurityRealm extends AbstractPasswordBasedSecurityRealm {
         return cache == null ? null : cache.getTtl();
     }
 
-    /**
-     * Initializes all objects necessary to talk to / with Crowd.
-     */
     private void initializeConfiguration() {
         configuration = new CrowdConfigurationService(
                 url, applicationName, password, sessionValidationInterval,
@@ -660,9 +500,6 @@ public class CrowdSecurityRealm extends AbstractPasswordBasedSecurityRealm {
         /**
          * Performs on-the-fly validation of the form field 'application name'.
          *
-         * @param applicationName
-         *            The application name.
-         *
          * @return Indicates the outcome of the validation. This is sent to the browser.
          */
         public FormValidation doCheckApplicationName(
@@ -680,9 +517,6 @@ public class CrowdSecurityRealm extends AbstractPasswordBasedSecurityRealm {
 
         /**
          * Performs on-the-fly validation of the form field 'password'.
-         *
-         * @param password
-         *            The application's password.
          *
          * @return Indicates the outcome of the validation. This is sent to the browser.
          */
@@ -728,38 +562,6 @@ public class CrowdSecurityRealm extends AbstractPasswordBasedSecurityRealm {
          * Checks whether the connection to the Crowd server can be established using the given
          * credentials.
          *
-         * @param url
-         *            The URL of the Crowd server.
-         * @param applicationName
-         *            The application name.
-         * @param password
-         *            The application's password.
-         * @param group
-         *            The Crowd groups users have to belong to if specified.
-         * @param useSSO
-         *            Spcifies if SSO should be used
-         * @param cookieDomain
-         *            The cookie domain
-         * @param sessionValidationInterval
-         *            The session validation interval
-         * @param cookieTokenkey
-         *            The cookie token key
-         * @param useProxy
-         *            Specifies if a proxy should be used
-         * @param httpProxyHost
-         *            The http proxy host
-         * @param httpProxyPort
-         *            The http proxy port
-         * @param httpProxyUsername
-         *            The http proxy username
-         * @param httpProxyPassword
-         *            The http proxy password
-         * @param socketTimeout
-         *            The socket timeout
-         * @param httpTimeout
-         *            The http timeout
-         * @param httpMaxConnections
-         *            The http max connections
          * @return Indicates the outcome of the validation. This is sent to the browser.
          */
         @POST
