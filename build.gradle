@@ -26,12 +26,12 @@ targetCompatibility = 1.8
 ext {
     // Yikes! Get this coverage up!
     limits = [
-        'instruction': 7,
+        'instruction': 11,
         'branch'     : 6,
-        'line'       : 7,
-        'complexity' : 12,
-        'method'     : 23,
-        'class'      : 39
+        'line'       : 11,
+        'complexity' : 13,
+        'method'     : 25,
+        'class'      : 43
     ]
 }
 
