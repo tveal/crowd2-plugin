@@ -26,12 +26,12 @@ targetCompatibility = 1.8
 ext {
     // Yikes! Get this coverage up!
     limits = [
-        'instruction': 11,
-        'branch'     : 6,
-        'line'       : 11,
-        'complexity' : 13,
-        'method'     : 25,
-        'class'      : 43
+        'instruction': 14,
+        'branch'     : 8,
+        'line'       : 13,
+        'complexity' : 17,
+        'method'     : 30,
+        'class'      : 60
     ]
 }
 
@@ -78,6 +78,13 @@ repositories {
 }
 
 dependencies {
+    // lombok
+    implementation 'org.projectlombok:lombok:1.18.6'
+    annotationProcessor 'org.projectlombok:lombok:1.18.6'
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+    testImplementation 'org.projectlombok:lombok:1.18.6'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.6'
+
     implementation("com.atlassian.crowd:crowd-integration-client-rest:2.8.8") {
         exclude(module: 'org.apache.httpcomponents:httpclient')
         exclude(module: 'org.apache.httpcomponents:httpclient-cache')
